@@ -1,0 +1,53 @@
+// Question URL: https://leetcode.com/problems/increasing-order-search-tree/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Solution 1 : Using Recursion
+
+    TreeNode* increasingBST(TreeNode* root) {
+        if(!root)return root;
+        TreeNode * head = root;
+        if(root->left)
+        {
+            TreeNode * temp = root->left;
+            while(temp->right)temp = temp->right;
+            temp->right = root;
+            temp = root->left;
+            root->left = nullptr;
+            head = increasingBST(temp);
+        }
+        root->right = increasingBST(root->right);
+        return head;
+    }
+    
+    
+    
+    
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+  Solution 2: Using Stack
+  
+      TreeNode* increasingBST(TreeNode* root) {
+        if(!root)return root;
+        stack<TreeNode *>stk;
+        TreeNode *head,*prev = nullptr;
+        while(true)
+        {
+            while(root)
+            {
+                stk.push(root);
+                TreeNode *next = root->left;
+                root->left = nullptr;
+                root = next;
+            }
+            if(stk.empty())break;
+            root = stk.top();stk.pop();
+            if(prev){prev->right = root;}
+            else {head = root;}
+            prev = root;
+            root = root->right;
+        }
+        return head;
+    }
