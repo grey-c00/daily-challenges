@@ -1,0 +1,26 @@
+// Question URL: https://leetcode.com/problems/recover-binary-search-tree/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Solution :
+
+    vector<TreeNode*>arr;
+    void recoverTree(TreeNode* root) {
+        TreeNode * prev = nullptr;
+        process(root,prev);
+        swap(arr[0]->val,arr[arr.size()-1]->val);
+    }
+    TreeNode * process(TreeNode * root,TreeNode * prev)
+    {
+        if(!root)
+        {
+            return prev;
+        }
+        prev = process(root->left,prev);
+        if(prev&&prev->val>root->val)
+        {
+            arr.push_back(prev);
+            arr.push_back(root);
+        }
+        return process(root->right,root);
+    }
