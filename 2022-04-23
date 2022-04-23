@@ -1,0 +1,31 @@
+// Question URL: https://leetcode.com/problems/encode-and-decode-tinyurl/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Solution:
+
+    unordered_map<string,string>mp;
+    string str = "";
+    string encode(string longUrl) {
+        next(str);
+        mp[str] = longUrl;
+        return str;
+    }
+
+    // Decodes a shortened URL to its original URL.
+    string decode(string shortUrl) {
+        return mp[shortUrl];
+    }
+    void next(string &str)
+    {
+        int carry = 1;
+        for(char &x:str)
+        {
+            x+=carry;
+            carry = (x-'0')/10;
+            x = (x-'0')%10+'0';
+            if(!carry)break;
+        }
+        if(carry)str.push_back(carry+'0');
+    }
