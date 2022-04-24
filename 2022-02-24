@@ -1,0 +1,40 @@
+// Question URL: https://leetcode.com/problems/design-underground-system/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Solution:
+
+map<int,pair<string,int> >data;
+    map<pair<string,string> ,pair<int,int> > station;
+    UndergroundSystem() {
+        data.clear();
+        station.clear();
+    }
+    
+    void checkIn(int id, string stationName, int t) {
+        data[id] = make_pair(stationName,t);
+    }
+    
+    void checkOut(int id, string stationName, int t) {
+        map<int,pair<string,int> >::iterator itr = data.find(id);
+        pair<string,string>pr {itr->second.first,stationName};
+        map<pair<string,string>,pair<int,int> >::iterator itr2 = station.find(pr);
+        if(itr2==station.end())
+        {
+            station[pr] = make_pair(t-itr->second.second,1);
+        }
+        else
+        {
+            itr2->second.first += (t-itr->second.second);
+            itr2->second.second+=1;
+        }
+    }
+    
+    double getAverageTime(string start, string end) {
+        map<pair<string,string>,pair<int,int> >::iterator itr = station.find(make_pair(start,end));
+        if(itr==station.end())return 0;
+        double t = itr->second.first;
+        double n = itr->second.second;
+        return t/n;
+    }
