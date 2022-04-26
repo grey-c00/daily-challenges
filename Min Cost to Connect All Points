@@ -1,0 +1,48 @@
+// Question URL: https://leetcode.com/problems/min-cost-to-connect-all-points/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Solution:
+
+static auto _=[]{ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);};
+class Solution {
+public:
+    vector<pair<pair<int,int>,int> >arr;
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        for(int i = 0;i<n;++i){
+            for(int j = i+1;j<n;++j){
+                arr.push_back(make_pair(make_pair(i,j),dis(i,j,points)));
+            }
+        }
+        sort(arr.begin(),arr.end(),[](const pair<pair<int,int> ,int> &a, const pair<pair<int,int>,int> &b){
+            if(a.second==b.second)return false;
+            return a.second<b.second;
+        });
+        int ans = 0;
+        int parent = -1;
+        int count = 0;
+        map<int,vector<int> >mp;
+        for(int i = 0;i<arr.size()&&count<n-1;++i){
+            pair<pair<int,int> , int> pr = arr[i];
+            if(cycle(parent,pr.first.first,pr.first.second,mp)){continue;}
+            ++count;
+            ans+=pr.second;
+            mp[pr.first.first].push_back(pr.first.second);
+            mp[pr.first.second].push_back(pr.first.first);
+        }
+        return ans;
+    }
+    bool cycle(int & parent,int  &current,int &destination,map<int,vector<int> >&mp){
+        if(current==destination)return true;
+        for(int &x:mp[current]){
+            if( x!=parent && cycle(current,x,destination,mp))return true;
+        }
+        return false;
+    }
+    int inline dis(int &i,int &j,const vector<vector<int> > & arr){
+        return abs(arr[i][0]-arr[j][0])+abs(arr[i][1]-arr[j][1]);
+    }
+};
