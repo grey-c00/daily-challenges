@@ -1,0 +1,46 @@
+// Question URL: https://leetcode.com/problems/smallest-string-with-swaps/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Solution:
+
+static auto _=[]{ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);};
+class Solution {
+public:
+    string smallestStringWithSwaps(string s, vector<vector<int>>& pairs) {
+        int n = s.size();
+        vector<int>v(n,0);
+        unordered_map<int,vector<int> >mp;
+        for(vector<int>&arr:pairs){
+            mp[arr[0]].push_back(arr[1]),mp[arr[1]].push_back(arr[0]);
+            v[arr[0]] = v[arr[1]] = 1;
+        }
+        for(int x=0;x<n;++x)
+        {
+            if(v[x]==1)
+            {
+                vector<int>connected;
+                process(-1,x,v,connected,mp);
+                sort(connected.begin(),connected.end());
+                string str = "";
+                for(int &index:connected)str.push_back(s[index]);
+                sort(str.begin(),str.end());
+                for(int i=0;i<connected.size();++i)s[connected[i]]=str[i];
+                
+            }
+        }
+        return s;
+    }
+    void process(int parent,int current,vector<int>&v,vector<int>&connected, unordered_map<int,vector<int> >&mp)
+    {
+        if(v[current]==2)return;
+        v[current]=2;
+        connected.push_back(current);
+        for(auto &x:mp[current])
+        {
+            if(x!=parent)process(current,x,v,connected,mp);
+        }
+        
+    }
+};
