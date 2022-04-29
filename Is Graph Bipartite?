@@ -1,0 +1,38 @@
+// Question URL: https://leetcode.com/problems/is-graph-bipartite/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Solution:
+
+static auto _=[]{ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);};
+class Solution {
+public:
+    unordered_map<int,int>mp;
+    bool isBipartite(vector<vector<int>>& graph) {
+        unordered_map<int,vector<int> >edges;
+        mp[-1] = 0;
+        bool flag = true;
+        int n = graph.size();
+        for(int i = 0;i<n&&flag;++i){
+            if(mp.find(i)==mp.end()) 
+                flag = flag&&(process(graph,-1,i));
+        }
+        return flag;
+    }
+    bool process(vector<vector<int> >&graph,int parent,int current)
+    {
+        int val = mp[parent];
+        val = val==0?1:0;
+        if(mp.find(current)!=mp.end())
+        {
+            return mp[current]==val;
+        }
+        mp[current] = val;
+        for(int &x:graph[current])
+        {
+            if(x!=parent)if(process(graph,current,x)==false)return false;
+        }
+        return true;
+    }
+};
